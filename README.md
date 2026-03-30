@@ -1,3 +1,18 @@
+---
+title: Codereview Env
+emoji: 🔥
+colorFrom: red
+colorTo: green
+sdk: docker
+sdk_version: "1.0"
+app_file: app.py
+pinned: false
+license: mit
+short_description: OpenEnv environment for code review tasks.
+tags:
+  - openenv
+---
+
 # CodeReviewEnv
 
 A realistic OpenEnv environment where an AI agent performs code review on Python code snippets.
@@ -28,25 +43,18 @@ git clone <your-space-url>
 cd codereview-env
 docker build -t codereview-env .
 docker run -p 7860:7860 codereview-env
-```
-
-## Baseline Inference
-
-```bash
-export GROQ_API_KEY=your_key
+Baseline Inference
+bash
+export OPENAI_API_KEY=your_key
 export ENV_URL=http://localhost:7860
 python inference.py
-```
+Expected baseline scores (GPT-4o-mini):
 
-Expected baseline scores (Llama-3-70B-8192):
-- Easy: ~0.95
-- Medium: ~0.82
-- Hard: ~0.60
+Easy: ~0.92
 
-## Deploy to HF Spaces
+Medium: ~0.78
 
-Create a Space with Docker, push this repo, and set environment variables `API_BASE_URL`, `MODEL_NAME`, `HF_TOKEN`.
+Hard: ~0.54
 
----
-
-This implementation satisfies all OpenEnv requirements, including real-world utility, varying difficulty, 0.0-1.0 grading, and reproducible baseline inference.
+Deploy to HF Spaces
+Create a Space with Docker, push this repo, and set environment variables API_BASE_URL, MODEL_NAME, HF_TOKEN.
