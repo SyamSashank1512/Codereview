@@ -1,0 +1,56 @@
+name: CodeReviewEnv
+version: "1.0.0"
+description: |
+  An AI agent environment for performing code reviews on Python snippets.
+  The agent identifies bugs, style issues, security flaws, and performance problems.
+  Three tasks of increasing difficulty, graded by F1 score (0.0–1.0) against ground truth.
+authors:
+  - name: Your Name
+    email: you@example.com
+tags:
+  - code-review
+  - software-engineering
+  - text
+tasks:
+  - id: easy
+    name: "Find 2 simple issues"
+    description: "Missing zero-division guard and missing docstring"
+    difficulty: easy
+  - id: medium
+    name: "Find 3 issues including logic error"
+    description: "Logic error (wrong dict key), hardcoded API key, missing type hints"
+    difficulty: medium
+  - id: hard
+    name: "Find 5 issues including security flaw"
+    description: "Race condition, O(n²) anti-pattern, eval() security hole, missing docstrings"
+    difficulty: hard
+action_space:
+  type: object
+  properties:
+    issues:
+      type: array
+      items:
+        type: object
+        properties:
+          line:
+            type: integer
+            minimum: 1
+          category:
+            type: string
+            enum: [bug, style, security, performance, documentation]
+          description:
+            type: string
+            maxLength: 200
+    final:
+      type: boolean
+observation_space:
+  type: object
+  properties:
+    code:
+      type: string
+    step_count:
+      type: integer
+    previous_feedback:
+      type: string
+    done:
+      type: boolean
