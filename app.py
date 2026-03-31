@@ -2,7 +2,7 @@ import uuid
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Optional
 
 # Import your environment logic
 # Ensure these files exist in a folder named 'environment' with an __init__.py file
@@ -15,7 +15,7 @@ app = FastAPI(title="CodeReviewEnv")
 sessions: Dict[str, CodeReviewEnv] = {}
 
 class ResetRequest(BaseModel):
-    task_id: str
+    task_id: str = "easy"
 
 class StepRequest(BaseModel):
     session_id: str
@@ -38,8 +38,10 @@ async def health():
     return {"status": "ok"}
 
 @app.post("/reset")
-async def reset_endpoint(req: ResetRequest):
+async def reset_endpoint(req: Optional[ResetRequest] = None):
     try:
+        if req is None:
+            req = ResetRequest()
         # Create a new session with a unique ID
         session_id = str(uuid.uuid4())
         env = CodeReviewEnv(req.task_id)
