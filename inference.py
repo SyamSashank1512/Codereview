@@ -12,14 +12,14 @@ logger = logging.getLogger(__name__)
 # --- CONFIGURATION ---
 # The judges will provide these via environment variables
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.groq.com/openai/v1")
-API_KEY = os.getenv("GROQ_API_KEY") or os.getenv("HF_TOKEN") or os.getenv("OPENAI_API_KEY")
 MODEL_NAME = os.getenv("MODEL_NAME", "llama3-70b-8192")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 # UPDATED: Points directly to your Space URL by default
 ENV_URL = os.getenv("ENV_URL", "https://syam-sashank-codereview-env.hf.space")
 
 # Initialize OpenAI Client
-client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
 
 def parse_llm_response(text: str) -> Action:
     """
@@ -50,6 +50,7 @@ def run_task(task_id: str) -> float:
     logger.info(f"--- Starting Task: {task_id} ---")
     
     # 1. Reset environment
+    print("START")
     resp = requests.post(f"{ENV_URL}/reset", json={"task_id": task_id})
     resp.raise_for_status()
     reset_data = resp.json()
@@ -85,6 +86,7 @@ Code to review:
     action = parse_llm_response(raw_content)
 
     # 3. Take step in the environment
+    print("STEP")
     step_resp = requests.post(f"{ENV_URL}/step", json={
         "session_id": session_id,
         "action": action.dict()
@@ -95,6 +97,7 @@ Code to review:
     # Extract the F1-based reward
     final_reward = result_data["reward"]["value"]
     logger.info(f"Result for {task_id}: Score = {final_reward:.3f}")
+    print("END")
     
     return final_reward
 
