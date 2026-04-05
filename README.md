@@ -46,7 +46,7 @@ docker build -t codereview-env .
 docker run -p 7860:7860 codereview-env
 Baseline Inference
 bash
-export OPENAI_API_KEY=your_key
+export HF_TOKEN=your_key
 export ENV_URL=http://localhost:7860
 python inference.py
 Expected baseline scores (GPT-4o-mini):
